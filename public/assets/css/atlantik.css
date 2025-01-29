@@ -1,3 +1,30 @@
 body {
     background-color: #1c1c1c; 
 }
+
+.blackBg {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.divAccueil1 {
+    background-image: url('/assets/images/img_accueil.jpg');
+    background-color: rgba(0, 0, 0, 0.6);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: darken;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid white;
+    height: 60%;
+}
+
+.divAccueil2 {
+    background-color: rgba(0, 0, 0, 0.6);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: darken;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    height: 60%;
+}

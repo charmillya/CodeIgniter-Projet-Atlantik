@@ -13,3 +13,23 @@
     <link rel="stylesheet" href=<?= css_url('atlantik') ?>></link>
 </head>
 <body>
+    
+<style>
+    .navbar {
+        border-bottom: 1px solid white;
+    }
+</style>
+
+<nav class="navbar blackBg navbar-expand-sm justify-content-center">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 3</a>
+    </li>
+  </ul>
+</nav>  
