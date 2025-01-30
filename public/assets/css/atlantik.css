@@ -1,12 +1,32 @@
 body {
+    margin-top: 80px;
     background-color: #1c1c1c; 
 }
 
 .blackBg {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: black;
 }
 
-.divAccueil1 {
+.accueilBtnConn {
+    background-color: white;
+    color: black;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.accueilBtnConn:hover {
+    background-color: black;
+    color: white;
+}
+
+.connexionInput {
+    border-radius: 8px;
+    padding: 5px 5px;
+}
+
+.accueilDiv1 {
     background-image: url('/assets/images/img_accueil.jpg');
     background-color: rgba(0, 0, 0, 0.6);
     background-size: cover;
@@ -16,10 +36,10 @@ body {
     padding: 20px;
     border-radius: 20px;
     border: 2px solid white;
-    height: 60%;
+    height: 65%;
 }
 
-.divAccueil2 {
+.accueilDiv2 {
     background-color: rgba(0, 0, 0, 0.6);
     background-size: cover;
     background-position: center;
@@ -27,4 +47,10 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
     height: 60%;
+}
+
+.connexionBtn {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
 }

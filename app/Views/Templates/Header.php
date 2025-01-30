@@ -20,16 +20,26 @@
     }
 </style>
 
-<nav class="navbar blackBg navbar-expand-sm justify-content-center">
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="#">Link 1</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Link 2</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Link 3</a>
-    </li>
-  </ul>
+<nav class="navbar blackBg navbar-expand-sm fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><b>Atlantik</b></a>
+    <ul class="navbar-nav justify-content-center text-light">
+      <?php if(isset($_SESSION['prenom'])) {
+        echo '<i> Bonjour, ' . '<b>' . $_SESSION['prenom'] . '</b>' . '.</i>';
+      }?>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <?php if(!isset($_SESSION['mel'])) {
+        echo '<li class="nav-item">
+          <a class="nav-link" href="connexion">Me connecter</a>
+        </li>';
+      } else { 
+        echo '<li class="nav-item">
+          <a class="nav-link" href="deconnexion">Déconnexion</a>
+        </li>';
+      }?>
+      </li>
+    </ul>
+  </div>
 </nav>  

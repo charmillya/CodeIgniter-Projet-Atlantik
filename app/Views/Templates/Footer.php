@@ -4,7 +4,7 @@
     }
 </style>
 
-<footer class="blackBg text-center text-light">
+<footer class="footer blackBg text-center text-light">
   <!-- Copyright -->
   <div class="text-center p-3">
     © 2025 Copyright:
