@@ -33,7 +33,7 @@ class Visiteur extends BaseController
         ];
         if (!$this->validate($reglesValidation)) {
 
-            $data['Erreur'] = "Saisie incorrecte !";
+            $data['Erreur'] = "Saisie incorrecte / veuillez remplir tous les champs.";
             return view('Templates/Header', $data)
             . view('Visiteur/vue_connexion', $data) // Renvoi formulaire de connexion
             . view('Templates/Footer');
@@ -79,6 +79,64 @@ class Visiteur extends BaseController
             . view('Visiteur/vue_creer_compte')
             . view('Templates/Footer');
         }
+
+        $reglesValidation = [ // Régles de validation
+            'txtIdentifiant' => 'required|valid_email',
+            'txtMotDePasse' => 'required|string',
+            'txtNom' => 'required|string',
+            'txtPrenom' => 'required|string',
+            'txtAdresse' => 'required|string',
+            'txtCodePostal' => 'required|alpha_numeric|exact_length[5]',
+            'txtVille' => 'required|string',
+            'txtTelFixe' => 'permit_empty|alpha_numeric',
+            'txtTelMobile' => 'permit_empty|alpha_numeric',
+        ];
+        if (!$this->validate($reglesValidation)) {
+
+            $data['Erreur'] = "Saisie incorrecte / veuillez remplir tous les champs.";
+            return view('Templates/Header', $data)
+            . view('Visiteur/vue_creer_compte', $data)
+            . view('Templates/Footer');
+        }
+
+        if ($this->request->getPost('txtTelFixe') != null) {
+            $TelFixe = $this->request->getPost('txtTelFixe');
+        } else {
+            $TelFixe = null;
+        }
+        if ($this->request->getPost('txtTelMobile') != null) {
+            $TelMobile = $this->request->getPost('txtTelMobile');
+        } else {
+            $TelMobile = null;
+        }
+
+        $donneesAInserer = array(
+            'MEL' => $this->request->getPost('txtIdentifiant'),
+            'MOTDEPASSE' => password_hash($this->request->getPost('txtMotDePasse'), PASSWORD_ARGON2I),
+            'NOM' => $this->request->getPost('txtNom'),
+            'PRENOM' => $this->request->getPost('txtPrenom'),
+            'ADRESSE' => $this->request->getPost('txtAdresse'),
+            'CODEPOSTAL' => $this->request->getPost('txtCodePostal'),
+            'VILLE' => $this->request->getPost('txtVille'),
+            'TELFIXE' => $TelFixe,
+            'TELMOBILE' => $TelMobile,
+        );
+
+        $modClient = new ModeleClient(); // instanciation modèle
+        $data['clientAjoute'] = $modClient->insert($donneesAInserer, false);
+        
+        if ($data['clientAjoute'] == 1) {
+            $data['TitreDeLaPage'] = "Atlantik - Connexion";
+            return view('Templates/Header', $data)
+            .view('Visiteur/vue_connexion', $data)
+            .view('Templates/Footer');
+        } else {
+            $data['Erreur'] = "Erreur lors de l'ajout.";
+            return view('Templates/Header', $data)
+            .view('Visiteur/vue_creer_compte', $data)
+            .view('Templates/Footer');
+        }
+
     }
 
     public function seDeconnecter()

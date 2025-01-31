@@ -16,7 +16,8 @@ echo csrf_field(); ?>
 <br>
 <label for="txtMotDePasse">Mot de passe</label>
 <br>
-<input class="connexionInput" type="input" name="txtMotDePasse" value="<?php echo set_value('txtMotDePasse'); ?>" /><br />
+<input class="connexionInput" type="password" name="txtMotDePasse" value="<?php echo set_value('txtMotDePasse'); ?>" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+title="Le mot de passe doit contenir au moins 8 caractères dont un chiffre, une lettre majuscule et une lettre minuscule" /><br />
 
 <br><br><br>
 <div class="connexionBtn">

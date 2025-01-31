@@ -25,7 +25,7 @@
     <a class="navbar-brand" href="/"><b>Atlantik</b></a>
     <ul class="navbar-nav justify-content-center text-light">
       <?php if(isset($_SESSION['prenom'])) {
-        echo '<i> Bonjour, ' . '<b>' . $_SESSION['prenom'] . '</b>' . '.</i>';
+        echo '<i> Bonjour, vous êtes connecté.e en tant que ' . '<b>' . $_SESSION['prenom'] . '</b>' . '.</i>';
       }?>
       </li>
     </ul>
