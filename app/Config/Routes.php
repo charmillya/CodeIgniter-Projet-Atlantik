@@ -5,8 +5,10 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Visiteur::accueil');
-$routes->match(['get', 'post'], 'connexion', 'Visiteur::seConnecter');
-$routes->match(['get', 'post'], 'creercompte', 'Visiteur::creerUnCompte');
-$routes->get('deconnexion', 'Visiteur::seDeconnecter');
+$routes->get('/', 'Visiteur::Accueil');
+$routes->match(['get', 'post'], 'connexion', 'Visiteur::SeConnecter');
+$routes->match(['get', 'post'], 'creercompte', 'Visiteur::CreerUnCompte');
+$routes->get('deconnexion', 'Visiteur::SeDeconnecter');
+
+$routes->get('afficherliaisons', 'Visiteur::AfficherLesLiaisons');
 

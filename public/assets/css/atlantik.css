@@ -7,6 +7,24 @@ body {
     background-color: black;
 }
 
+.navbar {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.Logo {
+    margin-left: 20px;
+}
+
+.footer {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.txtHyperlink {
+    color: #7373ff;
+}
+
 .accueilBtnConn {
     background-color: white;
     color: black;
@@ -34,7 +52,7 @@ body {
     background-blend-mode: darken;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
-    border-radius: 20px;
+    border-radius: 25px;
     border: 2px solid white;
     height: 65%;
 }
@@ -45,6 +63,8 @@ body {
     background-position: center;
     background-blend-mode: darken;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     padding: 20px;
     height: 60%;
 }
@@ -53,4 +73,14 @@ body {
     display: flex;
     justify-content: center;
     column-gap: 10px;
+}
+
+.tableLiaisons {
+    border-style: solid;
+    border-color: white;
+    border-width: 3px;
+    th, td {
+        border-width: 1px;
+        padding: 10px;
+    }
 }

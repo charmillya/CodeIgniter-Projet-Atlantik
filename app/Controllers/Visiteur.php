@@ -2,18 +2,20 @@
 
 namespace App\Controllers;
 use App\Models\ModeleClient;
+use App\Models\ModeleLiaison;
+
 helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
 class Visiteur extends BaseController
 {
-    public function accueil()
+    public function Accueil()
     {
         $session = session();
         $data['TitreDeLaPage'] = "Atlantik - Accueil";
         echo view('Templates/Header.php', $data) . view('Visiteur/vue_accueil') . view('Templates/Footer.php');
     }
 
-    public function seConnecter()
+    public function SeConnecter()
     {
         helper(['form']);
         $session = session();
@@ -66,7 +68,7 @@ class Visiteur extends BaseController
         }
     }
 
-    public function creerUnCompte()
+    public function CreerUnCompte()
     {
         helper(['form']);
         $session = session();
@@ -139,9 +141,21 @@ class Visiteur extends BaseController
 
     }
 
-    public function seDeconnecter()
+    public function SeDeconnecter()
     {
         session()->destroy();
         return redirect()->to('/');
+    }
+
+    public function AfficherLesLiaisons() {
+        
+        $data['TitreDeLaPage'] = "Atlantik - Liaisons par secteur";
+
+        $modLiaison = new ModeleLiaison(); // instanciation modèle
+        $data['lesLiaisons'] = $modLiaison->getLiaisonsParSecteur();
+
+        return view('Templates/Header', $data)
+        .view('Visiteur/vue_afficher_liaisons', $data)
+        .view('Templates/Footer');
     }
 }
