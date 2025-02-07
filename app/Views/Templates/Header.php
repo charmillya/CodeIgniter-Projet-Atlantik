@@ -27,7 +27,7 @@
     <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Consulter</a>
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="afficherliaisons">Afficher les liaisons par secteur</a></li>
+        <li><a class="dropdown-item" href="afficherliaisons">Consulter les liaisons par secteur</a></li>
       </ul>
     </li> 
   </ul>

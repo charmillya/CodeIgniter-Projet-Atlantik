@@ -3,6 +3,8 @@
 namespace App\Controllers;
 use App\Models\ModeleClient;
 use App\Models\ModeleLiaison;
+use App\Models\ModelePeriode;
+use App\Models\ModeleCategorie;
 
 helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
@@ -149,13 +151,38 @@ class Visiteur extends BaseController
 
     public function AfficherLesLiaisons() {
         
+        $session = session();
         $data['TitreDeLaPage'] = "Atlantik - Liaisons par secteur";
 
         $modLiaison = new ModeleLiaison(); // instanciation modèle
-        $data['lesLiaisons'] = $modLiaison->getLiaisonsParSecteur();
+        $data['lesLiaisons'] = $modLiaison->GetLiaisonsParSecteur();
 
         return view('Templates/Header', $data)
         .view('Visiteur/vue_afficher_liaisons', $data)
+        .view('Templates/Footer');
+    }
+
+    public function AfficherLesTarifs($liaison) {
+        
+        $session = session();
+        $data['TitreDeLaPage'] = "Atlantik - Tarifs pour une liaison";
+
+        $condition = ['liaison.noliaison'=>$liaison];
+
+        $modLiaison = new ModeleLiaison();
+        $data['lesTarifs'] = $modLiaison->where($condition)->GetTarifsPourLiaison();
+
+        $data['liaisonCourante'] = $modLiaison->where($condition)->GetLiaisonCourante();
+
+        $modCategorie = new ModeleCategorie();
+        $data['nbTypes'] = $modCategorie->GetNbTypes();
+
+        $modPeriode = new ModelePeriode();
+        $data['nbPeriodes'] = $modPeriode->countAllResults('noperiode');
+        $data['lesPeriodes'] = $modPeriode->findAll(); // revient à faire select * from periode
+
+        return view('Templates/Header', $data)
+        .view('Visiteur/vue_afficher_tarifs', $data)
         .view('Templates/Footer');
     }
 }

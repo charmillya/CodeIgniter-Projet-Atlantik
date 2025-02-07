@@ -63,10 +63,21 @@ body {
     background-position: center;
     background-blend-mode: darken;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
     padding: 20px;
     height: 60%;
+}
+
+.divRounded {
+    background-color: rgba(50,50,50);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    border-radius: 25px;
+    border: 2px solid white;
+    height: auto;
+    width: 40%;
+    margin: auto;
 }
 
 .connexionBtn {

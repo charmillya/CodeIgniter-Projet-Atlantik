@@ -1,6 +1,8 @@
 <div class="container text-center text-light">
 
+<div class="divRounded justify-content-center">
 <h2><b>Liaisons par secteur</b></h2>
+</div> 
 
 <br><br>
 
@@ -23,11 +25,11 @@ $secteurCourant = "";
 foreach($lesLiaisons as $uneLiaison) {
     echo "<tr>";
     if ($secteurCourant != $uneLiaison->secteurNom) {
-        echo "<td>".$uneLiaison->secteurNom."</td>";
+        echo "<td><b>".$uneLiaison->secteurNom."</b></td>";
     } else {
         echo "<td></td>";
     }
-    echo "<td>".$uneLiaison->NOLIAISON."</td>";
+    echo "<td><a href='affichertarifs/".$uneLiaison->NOLIAISON."'>".$uneLiaison->NOLIAISON."</td>";
     echo "<td>".$uneLiaison->DISTANCE."</td>";
     echo "<td>".$uneLiaison->portdepart."</td>";
     echo "<td>".$uneLiaison->portarrivee."</td>";
