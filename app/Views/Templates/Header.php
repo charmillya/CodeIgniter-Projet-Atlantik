@@ -38,11 +38,11 @@
 
       <?php if(!isset($_SESSION['mel'])) {
         echo '<li class="nav-item">
-          <a class="nav-link txtHyperlink" href="connexion">Me connecter</a>
+          <a class="nav-link txtHyperlink" href="/connexion">Me connecter</a>
         </li>';
       } else { 
         echo '<li class="nav-item">
-          <a class="nav-link txtHyperlink" href="deconnexion">Déconnexion</a>
+          <a class="nav-link txtHyperlink" href="/deconnexion">Déconnexion</a>
         </li>';
       }?>
     </ul>

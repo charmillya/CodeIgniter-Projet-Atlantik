@@ -178,8 +178,8 @@ class Visiteur extends BaseController
         $data['nbTypes'] = $modCategorie->GetNbTypes();
 
         $modPeriode = new ModelePeriode();
-        $data['nbPeriodes'] = $modPeriode->countAllResults('noperiode');
-        $data['lesPeriodes'] = $modPeriode->findAll(); // revient à faire select * from periode
+        $data['periodesPourLiaison'] = $modPeriode->where($condition)->GetPeriodesPourLiaison();
+        $data['nbPeriodes'] = $modPeriode->where($condition)->GetNbPeriodesPourLiaison();
 
         return view('Templates/Header', $data)
         .view('Visiteur/vue_afficher_tarifs', $data)
