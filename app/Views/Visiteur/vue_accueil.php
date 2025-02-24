@@ -10,7 +10,7 @@
     <br><br><br>
     <h1>Réservations de traversées</h1>
     <br><br><br><br><br>
-    <a class='btn btn-light accueilBtnConn' href='/'><b>Consulter les traversées</b></a>
+    <a class='btn btn-light accueilBtnConn' href='/traversees/1'><b>Consulter les traversées</b></a>
 
 
 </div>

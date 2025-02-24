@@ -5,6 +5,7 @@ use App\Models\ModeleClient;
 use App\Models\ModeleLiaison;
 use App\Models\ModelePeriode;
 use App\Models\ModeleCategorie;
+use App\Models\ModeleSecteur;
 
 helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
@@ -184,5 +185,22 @@ class Visiteur extends BaseController
         return view('Templates/Header', $data)
         .view('Visiteur/vue_afficher_tarifs', $data)
         .view('Templates/Footer');
+    }
+
+    public function AfficherLesTraversees($noSecteur) {
+        $session = session();
+        $data['TitreDeLaPage'] = "Atlantik - Traversées";
+
+        $modSecteur = new ModeleSecteur();
+        $data['lesSecteurs'] = $modSecteur->findAll();
+
+        $condition = ['liaison.nosecteur'=>$noSecteur];
+        $modLiaison = new ModeleLiaison();
+        $data['liaisonsSecteurCourant'] = $modLiaison->where($condition)->GetLiaisonsParSecteur();
+
+        return view('Templates/Header', $data)
+        .view('Visiteur/vue_afficher_traversees', $data)
+        .view('Templates/Footer');
+
     }
 }

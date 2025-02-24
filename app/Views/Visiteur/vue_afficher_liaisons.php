@@ -29,7 +29,7 @@ foreach($lesLiaisons as $uneLiaison) {
     } else {
         echo "<td></td>";
     }
-    echo "<td><a href='affichertarifs/".$uneLiaison->NOLIAISON."'>".$uneLiaison->NOLIAISON."</td>";
+    echo "<td><a href='/tarifs/".$uneLiaison->NOLIAISON."'>".$uneLiaison->NOLIAISON."</td>";
     echo "<td>".$uneLiaison->DISTANCE."</td>";
     echo "<td>".$uneLiaison->portdepart."</td>";
     echo "<td>".$uneLiaison->portarrivee."</td>";
