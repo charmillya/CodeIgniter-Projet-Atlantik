@@ -6,6 +6,7 @@ use App\Models\ModeleLiaison;
 use App\Models\ModelePeriode;
 use App\Models\ModeleCategorie;
 use App\Models\ModeleSecteur;
+use App\Models\ModeleTraversee;
 
 helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
@@ -47,7 +48,6 @@ class Visiteur extends BaseController
 
         $Identifiant = $this->request->getPost('txtIdentifiant');
         $MdP = $this->request->getPost('txtMotDePasse');
-        $MdP_Hash = password_hash($MdP, PASSWORD_ARGON2I);
 
         $modClient = new ModeleClient(); // instanciation modèle
 
@@ -197,6 +197,46 @@ class Visiteur extends BaseController
         $condition = ['liaison.nosecteur'=>$noSecteur];
         $modLiaison = new ModeleLiaison();
         $data['liaisonsSecteurCourant'] = $modLiaison->where($condition)->GetLiaisonsParSecteur();
+
+        if (!$this->request->is('post')) {
+            return view('Templates/Header', $data)
+            .view('Visiteur/vue_afficher_traversees', $data)
+            .view('Templates/Footer');
+        }
+
+        $data['noLiaisonSelected'] = $this->request->getPost('liaisons');
+        $data['dateSelected'] = $this->request->getPost('date');
+
+        $data['nomLiaisonSelected'] = $modLiaison->where('noliaison', $data['noLiaisonSelected'])->GetLiaisonCourante();
+
+        $modCategorie = new ModeleCategorie();
+        $data['lesCategories'] = $modCategorie->findAll();
+
+        $tabTraversees = array();
+
+        $condition = ['traversee.noliaison'=>$data['noLiaisonSelected'], 'DATE(traversee.dateheuredepart)'=>$data['dateSelected']];
+        $modTraversee = new ModeleTraversee();
+        $data['lesTraversees'] = $modTraversee->where($condition)->GetTraverseesBateaux();
+
+
+        foreach($data['lesTraversees'] as $uneTraversee) {
+            $traverseeCourante = array();
+            $traverseeCourante['NOTRAVERSEE'] = $uneTraversee->NOTRAVERSEE;
+            $traverseeCourante['DATEHEUREDEPART'] = date('H:i', strtotime($uneTraversee->DATEHEUREDEPART));
+            $traverseeCourante['NOM'] = $uneTraversee->NOM;
+            foreach($data['lesCategories'] as $uneCategorie) {
+                $condition = ['traversee.notraversee'=>$uneTraversee->NOTRAVERSEE, 'enregistrer.lettrecategorie'=>$uneCategorie->LETTRECATEGORIE];
+                $quantiteEnregistree = $modTraversee->where($condition)->GetQuantiteEnregistree();
+
+                $condition = ['traversee.notraversee'=>$uneTraversee->NOTRAVERSEE, 'contenir.lettrecategorie'=>$uneCategorie->LETTRECATEGORIE];
+                $quantiteMaximale = $modTraversee->where($condition)->GetCapaciteMaximale(); 
+
+                $traverseeCourante[$uneCategorie->LETTRECATEGORIE] = $quantiteMaximale->CAPACITEMAX-$quantiteEnregistree->QUANTITEENREGISTREE;
+            }
+            $tabTraversees[] = $traverseeCourante;
+        }
+
+        $data['tabTraversees'] = $tabTraversees;
 
         return view('Templates/Header', $data)
         .view('Visiteur/vue_afficher_traversees', $data)
