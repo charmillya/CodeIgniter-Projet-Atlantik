@@ -15,9 +15,10 @@ class ModeleType extends Model
 
     public function GetTypesTarifs($noLiaison, $noPeriode) {
         return $this->join('tarifer', 'tarifer.NOTYPE = type.NOTYPE and tarifer.LETTRECATEGORIE = type.LETTRECATEGORIE', 'inner')
+        ->join('categorie', 'categorie.LETTRECATEGORIE = type.LETTRECATEGORIE', 'inner')
         ->where('tarifer.noliaison', $noLiaison)
         ->where('tarifer.noperiode', $noPeriode)
-        ->select('*')
+        ->select('type.lettrecategorie as LETTRECATEGORIE, type.notype as NOTYPE, type.libelle as LIBELLETYPE, categorie.libelle as LIBELLECATEGORIE, tarifer.noperiode as NOPERIODE, tarifer.noliaison as NOLIAISON, tarifer.tarif as TARIF')
         ->get()
         ->getResult();
     }

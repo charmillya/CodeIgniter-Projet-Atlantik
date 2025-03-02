@@ -1,5 +1,5 @@
 <div class="text-light divRounded text-center">
-<h2><b>Réserver une traversée</b></h2>
+<h2><b>Confirmer une réservation</b></h2>
 </div>
 
 <br><br><br>
@@ -27,7 +27,7 @@
     </div>
 
     <br>
-    <h6><i>Veuillez saisir les informations relatives à la réservation</i></h6>
+    <h6><i>Veuillez confirmer les informations relatives à la réservation</i></h6>
     <br>
     <?php if(isset($Erreur)) {
         echo '<h6 class="text-danger"><b>'.$Erreur.'</b></h6><br>';
@@ -38,31 +38,21 @@
             <tr>
                 <td></td>
                 <td><b>Tarif en €</b></td>
-                <td><b>Quantité dispo.</b></td>
-                <td><b>Quantité souhaitée</b></td>
+                <td><b>Quantité</b></td>
             </tr>
             <?php
-            $quantiteCategorieCourante = 0;
             foreach($typesTarifs as $unTypeTarif) {
                 echo '<tr>';
                 echo '<td>'.$unTypeTarif->LIBELLETYPE.'</td>';
                 echo '<td>'.$unTypeTarif->TARIF.'</td>';
-
-                if($quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE] != $quantiteCategorieCourante) { // pour afficher la quantité dispo une seule fois par catégorie
-                    echo '<td>'.$quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE].'</td>';
-                } else {
-                    echo '<td></td>';
+                if(isset($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE]) > 0) {
+                    echo '<td><h6 class="text-success"><b>'.($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE]).'</b></h6></td>';
                 }
-                $quantiteCategorieCourante = $quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE];
-
-                echo '<td>
-                <input type="hidden" name="tabInfoLettre['.$unTypeTarif->LETTRECATEGORIE.']" value="0"/>
-                <input type="hidden" name="tabInfoType['.$unTypeTarif->NOTYPE.']" value="0"/>
-                <input type="number" name="'.$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE.'" min="0" max="'.$quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE].'" value="0"></td>'; // l'input des
-                // quantités est nommé en fonction de la catégorie et du type pour pouvoir les retrouver dans le POST, le max saisissable est la quantité dispo
+                else {
+                    echo '<td><h6><b>0</b></h6></td>';
+                }
                 echo '</tr>';
                 
-                // !! ajouter contrôle de saisie !!
             }
             ?>
         </table>
