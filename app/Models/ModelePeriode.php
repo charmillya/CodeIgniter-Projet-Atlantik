@@ -27,5 +27,15 @@ class ModelePeriode extends Model
         ->select('COUNT(liaison.noliaison) AS nbperiodes')
         ->first();
     }
+
+    public function GetPeriodePourTraversee($noTraversee) {
+        $requete = $this->db->query('SELECT DATE(dateheuredepart) as dateheuredepart FROM traversee WHERE notraversee = '.$noTraversee);
+        $dateDepart = $requete->getResult();
+        $dateDepart = $dateDepart[0]->dateheuredepart;
+        return $this->where('datedebut < ',$dateDepart)
+        ->where('datefin > ',$dateDepart)
+        ->select('periode.noperiode')
+        ->first();
+    }
     
 } // Fin Classe

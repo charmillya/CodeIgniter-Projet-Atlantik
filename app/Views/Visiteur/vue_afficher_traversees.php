@@ -2,7 +2,7 @@
 <h2><b>Horaires des traversées</b></h2>
 </div>
 
-<br><br><br><br>
+<br><br><br>
 
 <div class="container-fluid parent">
     <div class="divSecteurs child">
@@ -49,9 +49,9 @@
 
                 <table class="tableLiaisons text-light text-center mx-auto">
                     <tr>
-                        <td>N°</td>
-                        <td>Heure</td>
-                        <td>Bateau</td>
+                        <td><b>N°</b></td>
+                        <td><b>Heure</b></td>
+                        <td><b>Bateau</b></td>
                         <?php 
                         foreach($lesCategories as $uneCategorie) {
                             echo '<td><b>'.$uneCategorie->LETTRECATEGORIE.'</b><br>'.$uneCategorie->LIBELLE.'</td>';
@@ -61,7 +61,7 @@
                     <?php 
                     foreach($tabTraversees as $uneTraversee) {
                         echo '<tr>';    
-                        echo '<td>'.$uneTraversee['NOTRAVERSEE'].'</td>';
+                        echo '<td><a href="reserver/'.$uneTraversee['NOTRAVERSEE'].'">'.$uneTraversee['NOTRAVERSEE'].'</a></td>';
                         echo '<td>'.$uneTraversee['DATEHEUREDEPART'].'</td>';
                         echo '<td>'.$uneTraversee['NOM'].'</td>';
                         foreach($lesCategories as $uneCategorie) { // pour chaque catégorie, on affiche l'entrée dans l'array traverséeCourante correspondant à cette lettre
@@ -71,6 +71,8 @@
                     }
                     ?>
                 </table>
+                <br>
+                <h6><b>Pour réserver, cliquez sur le numéro de la traversée !</b></h6>
                 <br>
 
             <?php } ?>

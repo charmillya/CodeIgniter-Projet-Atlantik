@@ -130,6 +130,41 @@ body {
     height: auto;
 }
 
+.divReservation {
+    align-content: center;
+    background-color: rgb(17, 17, 17);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 25px;
+    border: 2px solid white;
+    height: auto;
+    width: 75%;
+    margin: auto;
+}
+
+.divInfosTraversee {
+    align-content: center;
+    background-color: rgb(48, 44, 44);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 20px;
+    border: 2px solid white;
+    height: auto;
+    width: 35%;
+    margin: auto;
+    padding: 10px;
+}
+
+.divInfosClient {
+    align-content: center;
+    background-color: rgb(37, 35, 35);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 15px;
+    border: 1px solid white;
+    height: auto;
+    width: 25%;
+    padding: 15px;
+    margin: auto;
+}
+
 .parent {
   margin: 1rem;
 }

@@ -59,9 +59,18 @@ class Visiteur extends BaseController
             $session->set('mel', $clientRetourne->MEL);
             $session->set('nom', $clientRetourne->NOM);
             $session->set('prenom', $clientRetourne->PRENOM);
+            $session->set('adresse', $clientRetourne->ADRESSE);
+            $session->set('codepostal', $clientRetourne->CODEPOSTAL);
+            $session->set('ville', $clientRetourne->VILLE);
 
-            $data['TitreDeLaPage'] = "Atlantik - Accueil";
-            return redirect()->to('/'); // Redirection vers la page d'accueil
+            if(isset($_SESSION["reservationNoTraversee"])) {
+                $data['TitreDeLaPage'] = "Atlantik - Réservation";
+                return redirect()->to(site_url('/traversees/reserver/'.$_SESSION["reservationNoTraversee"]));
+            } else {
+                $data['TitreDeLaPage'] = "Atlantik - Accueil";
+                return redirect()->to('/'); // Redirection vers la page d'accueil
+            }
+
         } else {
 
             $data['Erreur'] = "Identifiant et/ou mot de passe inconnu.s !";
@@ -212,12 +221,11 @@ class Visiteur extends BaseController
         $modCategorie = new ModeleCategorie();
         $data['lesCategories'] = $modCategorie->findAll();
 
-        $tabTraversees = array();
-
         $condition = ['traversee.noliaison'=>$data['noLiaisonSelected'], 'DATE(traversee.dateheuredepart)'=>$data['dateSelected']];
         $modTraversee = new ModeleTraversee();
         $data['lesTraversees'] = $modTraversee->where($condition)->GetTraverseesBateaux();
 
+        $tabTraversees = array();
 
         foreach($data['lesTraversees'] as $uneTraversee) {
             $traverseeCourante = array();
@@ -225,11 +233,9 @@ class Visiteur extends BaseController
             $traverseeCourante['DATEHEUREDEPART'] = date('H:i', strtotime($uneTraversee->DATEHEUREDEPART));
             $traverseeCourante['NOM'] = $uneTraversee->NOM;
             foreach($data['lesCategories'] as $uneCategorie) {
-                $condition = ['traversee.notraversee'=>$uneTraversee->NOTRAVERSEE, 'enregistrer.lettrecategorie'=>$uneCategorie->LETTRECATEGORIE];
-                $quantiteEnregistree = $modTraversee->where($condition)->GetQuantiteEnregistree();
+                $quantiteEnregistree = $modTraversee->GetQuantiteEnregistreeLettre($uneTraversee->NOTRAVERSEE, $uneCategorie->LETTRECATEGORIE);
 
-                $condition = ['traversee.notraversee'=>$uneTraversee->NOTRAVERSEE, 'contenir.lettrecategorie'=>$uneCategorie->LETTRECATEGORIE];
-                $quantiteMaximale = $modTraversee->where($condition)->GetCapaciteMaximale(); 
+                $quantiteMaximale = $modTraversee->GetCapaciteMaximale($uneTraversee->NOTRAVERSEE, $uneCategorie->LETTRECATEGORIE); 
 
                 $traverseeCourante[$uneCategorie->LETTRECATEGORIE] = $quantiteMaximale->CAPACITEMAX-$quantiteEnregistree->QUANTITEENREGISTREE;
             }

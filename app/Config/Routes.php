@@ -14,3 +14,5 @@ $routes->get('liaisons', 'Visiteur::AfficherLesLiaisons');
 $routes->get('tarifs/(:num)', 'Visiteur::AfficherLesTarifs/$1');
 
 $routes->match(['get', 'post'], 'traversees/(:num)', 'Visiteur::AfficherLesTraversees/$1');
+
+$routes->match(['get', 'post'], 'traversees/reserver/(:num)', 'Client::ReserverTraversee/$1');
