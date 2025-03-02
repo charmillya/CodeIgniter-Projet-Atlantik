@@ -8,6 +8,8 @@ use App\Models\ModeleCategorie;
 use App\Models\ModeleSecteur;
 use App\Models\ModeleType;
 use App\Models\ModeleTraversee;
+use App\Models\ModeleEnregistrer;
+use App\Models\ModeleReservation;
 
 helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
@@ -71,8 +73,6 @@ class Client extends BaseController
                 $totalQuantitePourCategorie = $quantiteSaisie; // reset du total si on change de catégorie
             }
 
-            // ! voir pourquoi le check ne marche pas si 2 1 1 pour la cat C
-
             if ($totalQuantitePourCategorie > $data['quantiteDispoCategorie'][$unTypeTarif->LETTRECATEGORIE]) {
                 $data['TitreDeLaPage'] = "Atlantik - Erreur de réservation";
                 $data['Erreur'] = "Il n'y a pas assez de places disponibles pour la catégorie ".$unTypeTarif->LIBELLECATEGORIE.".";
@@ -83,7 +83,8 @@ class Client extends BaseController
 
             $lettreCategorieCourante = $unTypeTarif->LETTRECATEGORIE;
             
-            if ($this->request->getPost($unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE) > 0) { // on met dans un tableau les quantités demandées pour lettre & type correspondants
+            if ($this->request->getPost($unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE) > 0) { 
+            // on met dans un tableau les quantités demandées pour lettre & type correspondants mais que si > 0 (uniquement les champs qu'on va insert)
                 $_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE] = $this->request->getPost($unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE);
             }
 
@@ -101,6 +102,7 @@ class Client extends BaseController
         // maintenant redirection vers confirmation puislà-bas ajout si validé par user
 
     }
+
 
     public function ConfirmerReservation($noTraversee) {
         $session = session();
@@ -125,14 +127,52 @@ class Client extends BaseController
             $data['tabReservationEntree'] = $_SESSION['tabReservationEntree'];
 
             //var_dump($_SESSION['tabReservationEntree']);
-            //die();
+            //die(); // pour voir le contenu des réservations de l'user
 
-            $data['TitreDeLaPage'] = "Atlantik - Confirmation de réservation";
+            $data['TitreDeLaPage'] = "Atlantik - Récapitulatif de réservation";
             return view('Templates/Header', $data)
-            . view('Client/vue_confirmer_reservation', $data)
+            . view('Client/vue_recap_reservation', $data)
             . view('Templates/Footer');
 
         }
+
+        $modReservation = new ModeleReservation();
+        $modEnregistrer = new ModeleEnregistrer();
+
+        $montantTotal = 0;
+        foreach($data['typesTarifs'] as $unTypeTarif) {
+            if(isset($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE])) {
+                $montantTotal += $unTypeTarif->TARIF*$_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE];
+            }
+        }
+
+        $data['noReservationSelected'] = $modReservation->insert([
+            'NOTRAVERSEE' => $noTraversee,
+            'NOCLIENT' => $_SESSION['numero'],
+            'DATEHEURE' => date('Y-m-d H:i:s'),
+            'MONTANTTOTAL' => $montantTotal,
+            'PAYE' => 1,
+            'MODEREGLEMENT' => 'CB' // par défaut
+        ]);
+
+        foreach($data['typesTarifs'] as $unTypeTarif) { 
+
+            if(isset($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE])) { // pour chaque type, si l'user a réservé au - un billet de celle-ci
+                $modEnregistrer->insert([ // on insert dans la bdd
+                    'NORESERVATION' => $data['noReservationSelected'],
+                    'LETTRECATEGORIE' => $unTypeTarif->LETTRECATEGORIE,
+                    'NOTYPE' => $unTypeTarif->NOTYPE,
+                    'QUANTITERESERVEE' => $_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE],
+                    'QUANTITEEMBARQUEE' => 0
+                ], false);
+            }
+
+        }
+
+        $data['TitreDeLaPage'] = "Atlantik - Confirmation de réservation"; 
+        return view('Templates/Header', $data)
+        . view('Client/vue_confirmation_reservation', $data)
+        . view('Templates/Footer');
 
     }
 

@@ -37,6 +37,16 @@
           echo '<li class="nav-item"><text class="nav-link text-light"><i> Bonjour, <b>' . $_SESSION['prenom'] . '</i></b></text></li>';
       }?>
 
+    <?php if(isset($_SESSION['prenom'])) { ?>
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">Mon compte</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/compte/commandes">Consulter mes commandes</a></li>
+          <li><a class="dropdown-item" href="/compte/modifier">Modifier mes informations</a></li>
+        </ul>
+      </li> 
+    <?php } ?>
+
       <?php if(!isset($_SESSION['mel'])) {
         echo '<li class="nav-item">
           <a class="nav-link txtHyperlink" href="/connexion">Me connecter</a>

@@ -1,5 +1,5 @@
 <div class="text-light divRounded text-center">
-<h2><b>Confirmer une réservation</b></h2>
+<h2><b>Récapitulatif de réservation</b></h2>
 </div>
 
 <br><br><br>
@@ -59,8 +59,8 @@
                     echo '<td><h6 class="text-info"><b>'.($unTypeTarif->TARIF*$_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE]).'€</b></h6></td>';
                 }
                 else {
-                    echo '<td><h6><b>0</b></h6></td>';
-                    echo '<td><h6><b>0€</b></h6></td>';
+                    echo '<td></td>';
+                    echo '<td></td>';
                 }
                 echo '</tr>';
                 
@@ -68,9 +68,15 @@
             ?>
         </table>
         <br>
-        <?php echo '<h6 class="text-info"><b>Montant total : '.$totalQuantite.'€</b></h6>'; ?>
-        <br>
-        <input type="submit" class="btn btn-light" name="btnValiderReservation" value="Valider mon panier">
+        
+        <?php 
+        echo '<h5 class="text-info"><b>Montant total : '.$totalQuantite.'€</b></h5>';
+        echo '<br>';
+        echo "<div class='connexionBtn'>";
+        echo '<a class="btn btn-light" href="/traversees/reserver/'.$traverseeSelected->NOTRAVERSEE.'">Modifier ma commande</a>';
+        echo '<input type="submit" class="btn btn-light" name="btnValiderReservation" value="Passer au paiement">';
+        echo '</div>';
+        ?>
     </form>
 
     <br><br>

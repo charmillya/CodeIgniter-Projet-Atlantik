@@ -56,6 +56,7 @@ class Visiteur extends BaseController
  
         if ($clientRetourne != null && password_verify($MdP, $clientRetourne->MOTDEPASSE)) {
 
+            $session->set('numero', $clientRetourne->NOCLIENT);
             $session->set('mel', $clientRetourne->MEL);
             $session->set('nom', $clientRetourne->NOM);
             $session->set('prenom', $clientRetourne->PRENOM);
