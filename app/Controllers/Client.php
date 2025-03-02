@@ -29,6 +29,10 @@ class Client extends BaseController
         $noLiaisonSelected = $modTraversee->where('traversee.notraversee', $noTraversee)->first();
         $data['typesTarifs'] = $modType->GetTypesTarifs($noLiaisonSelected->NOLIAISON, $data['noPeriodeTraversee']->noperiode);
 
+        foreach($data['typesTarifs'] as $unTypeTarif) { // chargement en priorité du tableau des quantités dispo pour éviter qu'il soit incomplet en cas d'erreur de saisie (return)
+            $data['quantiteDispoCategorie'][$unTypeTarif->LETTRECATEGORIE] = $modTraversee->GetCapaciteMaximale($noTraversee, $unTypeTarif->LETTRECATEGORIE)->CAPACITEMAX-$modTraversee->GetQuantiteEnregistreeLettre($noTraversee, $unTypeTarif->LETTRECATEGORIE)->QUANTITEENREGISTREE;
+        }
+
         if (!$this->request->is('post')) {
             if(!isset ($session->mel)) {
                 $_SESSION['reservationNoTraversee'] = $noTraversee;
@@ -43,10 +47,7 @@ class Client extends BaseController
 
         $totalQuantite = 0;
         $totalQuantitePourCategorie = 0; // initialisation à 0 pour le premier check
-
-        foreach($data['typesTarifs'] as $unTypeTarif) { // chargement en priorité du tableau des quantités dispo pour éviter qu'il soit incomplet en cas d'erreur de saisie (return)
-            $data['quantiteDispoCategorie'][$unTypeTarif->LETTRECATEGORIE] = $modTraversee->GetCapaciteMaximale($noTraversee, $unTypeTarif->LETTRECATEGORIE)->CAPACITEMAX-$modTraversee->GetQuantiteEnregistreeLettre($noTraversee, $unTypeTarif->LETTRECATEGORIE)->QUANTITEENREGISTREE;
-        }
+        $lettreCategorieCourante = $data['typesTarifs'][0]->LETTRECATEGORIE; // initialisation à vide pour le premier check
 
         foreach($data['typesTarifs'] as $unTypeTarif) { // check quantité > 0 & dispo bdd
 
@@ -64,19 +65,23 @@ class Client extends BaseController
             }
             // check ds un premier temps pr chaque input du form afin de pouvoir donner le libellé qui bloque si erreur. si tout est bon, on check pour la catégorie entière
 
-            $lettreCategorieCourante = $unTypeTarif->LETTRECATEGORIE;
-
             if($unTypeTarif->LETTRECATEGORIE == $lettreCategorieCourante) { // si on est tjrs sur la même cat
                 $totalQuantitePourCategorie += $quantiteSaisie;
+            } else {
+                $totalQuantitePourCategorie = $quantiteSaisie; // reset du total si on change de catégorie
             }
+
+            // ! voir pourquoi le check ne marche pas si 2 1 1 pour la cat C
 
             if ($totalQuantitePourCategorie > $data['quantiteDispoCategorie'][$unTypeTarif->LETTRECATEGORIE]) {
                 $data['TitreDeLaPage'] = "Atlantik - Erreur de réservation";
-                $data['Erreur'] = "Il n'y a pas assez de places restantes pour la catégorie ".$unTypeTarif->LIBELLECATEGORIE.".";
+                $data['Erreur'] = "Il n'y a pas assez de places disponibles pour la catégorie ".$unTypeTarif->LIBELLECATEGORIE.".";
                 return view('Templates/Header', $data)
                 . view('Client/vue_reserver_traversee', $data)
                 . view('Templates/Footer');            
             }
+
+            $lettreCategorieCourante = $unTypeTarif->LETTRECATEGORIE;
             
             if ($this->request->getPost($unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE) > 0) { // on met dans un tableau les quantités demandées pour lettre & type correspondants
                 $_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE] = $this->request->getPost($unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE);

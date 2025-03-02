@@ -39,23 +39,36 @@
                 <td></td>
                 <td><b>Tarif en €</b></td>
                 <td><b>Quantité</b></td>
+                <td><b>Coût</b></td>
             </tr>
             <?php
+            $totalQuantite = 0;
+            $lettreCategorieCourante = "";
             foreach($typesTarifs as $unTypeTarif) {
+                if($unTypeTarif->LETTRECATEGORIE != $lettreCategorieCourante) {
+                    echo '<tr>';
+                    echo '<td colspan="4"><b>'.$unTypeTarif->LIBELLECATEGORIE.'</b></td>';
+                    $lettreCategorieCourante = $unTypeTarif->LETTRECATEGORIE;
+                }
                 echo '<tr>';
                 echo '<td>'.$unTypeTarif->LIBELLETYPE.'</td>';
                 echo '<td>'.$unTypeTarif->TARIF.'</td>';
-                if(isset($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE]) > 0) {
+                if(isset($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE])) {
                     echo '<td><h6 class="text-success"><b>'.($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE]).'</b></h6></td>';
+                    $totalQuantite += $unTypeTarif->TARIF*$_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE];
+                    echo '<td><h6 class="text-info"><b>'.($unTypeTarif->TARIF*$_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE]).'€</b></h6></td>';
                 }
                 else {
                     echo '<td><h6><b>0</b></h6></td>';
+                    echo '<td><h6><b>0€</b></h6></td>';
                 }
                 echo '</tr>';
                 
             }
             ?>
         </table>
+        <br>
+        <?php echo '<h6 class="text-info"><b>Montant total : '.$totalQuantite.'€</b></h6>'; ?>
         <br>
         <input type="submit" class="btn btn-light" name="btnValiderReservation" value="Valider mon panier">
     </form>

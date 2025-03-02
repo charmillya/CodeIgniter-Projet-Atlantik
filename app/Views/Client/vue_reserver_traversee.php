@@ -38,22 +38,20 @@
             <tr>
                 <td></td>
                 <td><b>Tarif en €</b></td>
-                <td><b>Quantité dispo.</b></td>
                 <td><b>Quantité souhaitée</b></td>
             </tr>
             <?php
             $quantiteCategorieCourante = 0;
+            $lettreCategorieCourante = "";
             foreach($typesTarifs as $unTypeTarif) {
+                if($unTypeTarif->LETTRECATEGORIE != $lettreCategorieCourante) {
+                    echo '<tr>';
+                    echo '<td colspan="3"><b>'.$unTypeTarif->LIBELLECATEGORIE.' -  Quantité dispo. : '.$quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE].'</b></td>';
+                    $lettreCategorieCourante = $unTypeTarif->LETTRECATEGORIE;
+                }
                 echo '<tr>';
                 echo '<td>'.$unTypeTarif->LIBELLETYPE.'</td>';
                 echo '<td>'.$unTypeTarif->TARIF.'</td>';
-
-                if($quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE] != $quantiteCategorieCourante) { // pour afficher la quantité dispo une seule fois par catégorie
-                    echo '<td>'.$quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE].'</td>';
-                } else {
-                    echo '<td></td>';
-                }
-                $quantiteCategorieCourante = $quantiteDispoCategorie[$unTypeTarif->LETTRECATEGORIE];
 
                 echo '<td>
                 <input type="hidden" name="tabInfoLettre['.$unTypeTarif->LETTRECATEGORIE.']" value="0"/>
@@ -62,7 +60,6 @@
                 // quantités est nommé en fonction de la catégorie et du type pour pouvoir les retrouver dans le POST, le max saisissable est la quantité dispo
                 echo '</tr>';
                 
-                // !! ajouter contrôle de saisie !!
             }
             ?>
         </table>
