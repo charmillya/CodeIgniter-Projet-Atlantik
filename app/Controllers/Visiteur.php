@@ -63,6 +63,8 @@ class Visiteur extends BaseController
             $session->set('adresse', $clientRetourne->ADRESSE);
             $session->set('codepostal', $clientRetourne->CODEPOSTAL);
             $session->set('ville', $clientRetourne->VILLE);
+            $session->set('telfixe', $clientRetourne->TELEPHONEFIXE);
+            $session->set('telmobile', $clientRetourne->TELEPHONEMOBILE);
 
             if(isset($_SESSION["reservationNoTraversee"])) {
                 $data['TitreDeLaPage'] = "Atlantik - Réservation";

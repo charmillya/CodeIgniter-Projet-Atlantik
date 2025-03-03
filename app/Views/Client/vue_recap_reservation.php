@@ -72,6 +72,12 @@
         <?php 
         echo '<h5 class="text-info"><b>Montant total : '.$totalQuantite.'€</b></h5>';
         echo '<br>';
+        echo '<h6>Sélectionnez une méthode de paiement:</h6>';
+        echo '<select name="moyenPaiement" id="moyenPaiement">';
+        echo '<option value="CB">Carte bancaire</option>';
+        echo '<option value="ESPECES">Espèces</option>';
+        echo '</select>';
+        echo '<br><br>';
         echo "<div class='connexionBtn'>";
         echo '<a class="btn btn-light" href="/traversees/reserver/'.$traverseeSelected->NOTRAVERSEE.'">Modifier ma commande</a>';
         echo '<input type="submit" class="btn btn-light" name="btnValiderReservation" value="Passer au paiement">';
