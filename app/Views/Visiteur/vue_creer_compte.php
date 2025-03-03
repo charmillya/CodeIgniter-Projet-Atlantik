@@ -20,7 +20,7 @@
             echo form_open('creercompte');
             echo csrf_field(); ?>
             <h6><b>Adresse e-mail (<span class="text-danger">*</span>)</b></h6>
-            <input class="connexionInput" type="input" name="txtIdentifiant" value="<?php echo set_value('txtIdentifiant'); ?>" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="L'adresse e-mail doit être valide"><br>
+            <input class="connexionInput" type="text" name="txtIdentifiant" value="<?php echo set_value('txtIdentifiant'); ?>" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="L'adresse e-mail doit être valide"><br>
             <br>
 
             <h6><b>Mot de passe (<span class="text-danger">*</span>)</b></h6>
@@ -29,11 +29,11 @@
             <br>
 
             <h6><b>Nom (<span class="text-danger">*</span>)</b></h6>
-            <input class="connexionInput" type="input" name="txtNom" value="<?php echo set_value('txtNom'); ?>" /><br />
+            <input class="connexionInput" type="text" name="txtNom" value="<?php echo set_value('txtNom'); ?>" /><br />
             <br>
 
             <h6><b>Prénom (<span class="text-danger">*</span>)</b></h6>
-            <input class="connexionInput" type="input" name="txtPrenom" value="<?php echo set_value('txtPrenom'); ?>" /><br />
+            <input class="connexionInput" type="text" name="txtPrenom" value="<?php echo set_value('txtPrenom'); ?>" /><br />
             <br>
 
             <h6><b>Adresse (<span class="text-danger">*</span>)</b></h6>
@@ -41,19 +41,19 @@
             <br>
 
             <h6><b>Code Postal (<span class="text-danger">*</span>)</b></h6>
-            <input class="connexionInput" type="input" name="txtCodePostal" value="<?php echo set_value('txtCodePostal'); ?>" /><br />
+            <input class="connexionInput" type="number" name="txtCodePostal" value="<?php echo set_value('txtCodePostal'); ?>" /><br />
             <br>
 
             <h6><b>Ville (<span class="text-danger">*</span>)</b></h6>
-            <input class="connexionInput" type="input" name="txtVille" value="<?php echo set_value('txtVille'); ?>" /><br />
+            <input class="connexionInput" type="text" name="txtVille" value="<?php echo set_value('txtVille'); ?>" /><br />
             <br>
 
             <h6>Tel. fixe</h6>
-            <input class="connexionInput" type="input" name="txtTelFixe" value="<?php echo set_value('txtTelFixe'); ?>" /><br />
+            <input class="connexionInput" type="number" name="txtTelFixe" value="<?php echo set_value('txtTelFixe'); ?>" /><br />
             <br>
 
             <h6>Tel. mobile</h6>
-            <input class="connexionInput" type="input" name="txtTelMobile" value="<?php echo set_value('txtTelMobile'); ?>" /><br />
+            <input class="connexionInput" type="number" name="txtTelMobile" value="<?php echo set_value('txtTelMobile'); ?>" /><br />
             <br>
             <p class="text-danger">* Champs obligatoires</p>
             <br>

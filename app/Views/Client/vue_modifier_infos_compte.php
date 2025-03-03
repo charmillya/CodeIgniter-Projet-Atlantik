@@ -28,7 +28,7 @@
             <input type="text" class="input-group-text" style="margin: auto;" name="txtVille" value="<?php echo $_SESSION['ville']; ?>">
             <br>
             <h6><b>Code Postal (<span class="text-danger">*</span>)</b></h6>
-            <input type="text" class="input-group-text" style="margin: auto;" name="txtCodePostal" value="<?php echo $_SESSION['codepostal']; ?>">
+            <input type="text" class="input-group-text" style="margin: auto;" name="txtCodePostal" max="5" value="<?php echo $_SESSION['codepostal']; ?>">
             <br>
             <h6><b>Tél. fixe</b></h6>
             <input type="text" class="input-group-text" style="margin: auto;" name="txtTelFixe" value="<?php echo $_SESSION['telfixe']; ?>">

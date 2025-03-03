@@ -105,8 +105,8 @@ class Visiteur extends BaseController
             'txtAdresse' => 'required|string',
             'txtCodePostal' => 'required|alpha_numeric|exact_length[5]',
             'txtVille' => 'required|string',
-            'txtTelFixe' => 'permit_empty|alpha_numeric',
-            'txtTelMobile' => 'permit_empty|alpha_numeric',
+            'txtTelFixe' => 'permit_empty|alpha_numeric|exact_length[10]',
+            'txtTelMobile' => 'permit_empty|alpha_numeric|exact_length[10]',
         ];
         if (!$this->validate($reglesValidation)) {
 

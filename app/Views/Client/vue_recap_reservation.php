@@ -79,7 +79,7 @@
         echo '</select>';
         echo '<br><br>';
         echo "<div class='connexionBtn'>";
-        echo '<a class="btn btn-light" href="/traversees/reserver/'.$traverseeSelected->NOTRAVERSEE.'">Modifier ma commande</a>';
+        echo '<a class="btn btn-light" href="/traversees/reserver/'.$traverseeSelected->NOTRAVERSEE.'">Modifier ma réservation</a>';
         echo '<input type="submit" class="btn btn-light" name="btnValiderReservation" value="Passer au paiement">';
         echo '</div>';
         ?>

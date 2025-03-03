@@ -181,13 +181,13 @@ class Client extends BaseController
         }
 
 
-        try {
+        try {            
             $to = $_SESSION['mel'];
             $subject = "Votre réservation chez Atlantik";
 
             $txt = "Bonjour ".$_SESSION['prenom'].",\n\nNous vous confirmons votre réservation <b>n°".$data['noReservationSelected']."</b> 
             pour la traversée <b>n°".$data['traverseeSelected']->NOTRAVERSEE."</b> du <b>".date('d/m/Y', strtotime($data['traverseeSelected']->DATEHEUREDEPART))."</b>.
-            \n\n<b><i>Détail de votre réservation:</i></b> \n\n";
+            \n\n<b><i>Détail de votre réservation:</i></b> \n";
 
             foreach($data['typesTarifs'] as $unTypeTarif) {
                 if(isset($_SESSION['tabReservationEntree'][$unTypeTarif->LETTRECATEGORIE.$unTypeTarif->NOTYPE])) {
@@ -242,6 +242,22 @@ class Client extends BaseController
             . view('Templates/Footer');
         }
 
+        $reglesValidation = [ // Régles de validation
+            'txtAdresse' => 'required|string',
+            'txtCodePostal' => 'required|alpha_numeric|exact_length[5]',
+            'txtVille' => 'required|string',
+            'txtTelFixe' => 'permit_empty|alpha_numeric|exact_length[10]',
+            'txtTelMobile' => 'permit_empty|alpha_numeric|exact_length[10]',
+        ];
+        if (!$this->validate($reglesValidation)) {
+
+            $data['TitreDeLaPage'] = "Atlantik - Erreur de modification";
+            $data['erreur'] = "Saisie incorrecte / veuillez remplir tous les champs.";
+            return view('Templates/Header', $data)
+            . view('Client/vue_modifier_infos_compte', $data)
+            . view('Templates/Footer');
+        }
+
         if($this->request->getPost('txtTelFixe') != null) {
             $_SESSION['telfixe'] = $this->request->getPost('txtTelFixe');
         }
@@ -266,6 +282,19 @@ class Client extends BaseController
         $data['informationsModifiees'] = true;
         return view('Templates/Header', $data)
         . view('Client/vue_modifier_infos_compte', $data)
+        . view('Templates/Footer');
+    }
+
+    public function AfficherLesCommandes() {
+        $session = session();
+
+        $modReservation = new ModeleReservation();
+        $data['commandesClient'] = $modReservation->GetCommandesClient($_SESSION['numero']);
+        $data['pager'] = $modReservation->pager; // passer l'objet pager à la vue
+
+        $data['TitreDeLaPage'] = "Atlantik - Commandes";
+        return view('Templates/Header', $data)
+        . view('Client/vue_afficher_commandes', $data)
         . view('Templates/Footer');
     }
 

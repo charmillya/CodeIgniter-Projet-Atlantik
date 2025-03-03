@@ -19,5 +19,6 @@ $routes->match(['get', 'post'], 'traversees/reserver/(:num)', 'Client::ReserverT
 
 $routes->match(['get', 'post'], 'traversees/reserver/(:num)/confirmer', 'Client::ConfirmerReservation/$1');
 
+$routes->get('compte/commandes', 'Client::AfficherLesCommandes');
 $routes->match(['get', 'post'], 'compte/modifier', 'Client::ModifierInfosCompte');
 
