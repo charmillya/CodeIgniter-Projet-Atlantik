@@ -36,7 +36,7 @@
     </table>
     <br>
     <div class="pagination justify-content-center">
-        <?php echo '<h6 class="btn btn-light">'.$pager->links().'</h6>' ?>
+        <?= $pager->links('default', 'pagination_bootstrap') ?>
     </div>
     <br>
 </div>

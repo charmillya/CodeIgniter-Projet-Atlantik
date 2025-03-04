@@ -12,6 +12,7 @@ helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
 class Visiteur extends BaseController
 {
+    // php 8.2.12
     public function Accueil()
     {
         $session = session();

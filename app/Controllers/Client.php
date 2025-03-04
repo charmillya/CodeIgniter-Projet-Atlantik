@@ -11,6 +11,8 @@ use App\Models\ModeleTraversee;
 use App\Models\ModeleEnregistrer;
 use App\Models\ModeleReservation;
 use Exception;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
@@ -107,6 +109,10 @@ class Client extends BaseController
 
     public function ConfirmerReservation($noTraversee) {
         $session = session();
+
+        // pdf generation avec dompdf
+        require '../vendor/autoload.php';
+
         $modTraversee = new ModeleTraversee();
         $data['nomLiaisonSelected'] = $modTraversee->where('traversee.notraversee', $noTraversee)->GetLiaisonFromTraversee();
         $data['traverseeSelected'] = $modTraversee->where('traversee.notraversee', $noTraversee)->first();
@@ -181,6 +187,7 @@ class Client extends BaseController
         }
 
 
+        // génération email
         try {            
             $to = $_SESSION['mel'];
             $subject = "Votre réservation chez Atlantik";
@@ -204,6 +211,31 @@ class Client extends BaseController
         } catch (Exception $e) {
             $data['txtEnvoiMail'] = "Un problème est survenu lors de l'envoi du mail de confirmation. Veuillez vérifier votre adresse mail.";
         }
+
+
+        // génération pdf
+        try {
+            $pdfFactureOptions = new Options();
+            $pdfFactureOptions->set('defaultFont', 'Nunito');
+
+            $pdfFacture = new Dompdf($pdfFactureOptions);
+
+            $pdfFacture->setPaper('A4', 'portrait');
+            $pdfFacture->loadHtml('hello world');
+
+            $pdfFacture->render();
+
+            $output = $pdfFacture->output();
+            //$pdfFacture->stream(facture.pdf);
+
+            // à compléter !!!!!!
+
+            $data['pdfFactureReservation'] = $pdfFacture;
+
+        } catch(Exception $e) {
+            $data['erreur'] = "Un problème est survenu lors de la génération du PDF. Veuillez réessayer.";
+        }
+
 
         if($this->request->getPost('moyenPaiement') == 'ESPECES') {
             $data['TitreDeLaPage'] = "Atlantik - Confirmation de réservation"; 
