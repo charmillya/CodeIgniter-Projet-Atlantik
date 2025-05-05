@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controllers;
+use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
 use App\Models\ModeleClient;
 use App\Models\ModeleLiaison;
 use App\Models\ModelePeriode;
@@ -18,6 +20,29 @@ helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
 class Client extends BaseController
 {
+    use ResponseTrait;
+    
+    // récupérer toutes les commandes
+    public function indexReservations($noClient)
+    {
+        $modReservation = new ModeleReservation();
+        $donnees = $modReservation->GetAllCommandesClient($noClient);
+        return $this->respond($donnees);
+    }
+
+    public function indexClients($mel, $mdp)
+    {
+        $modClient = new ModeleClient();
+        $donnees = $modClient->where('MEL', $mel)->first();
+        if(password_verify($mdp, $donnees->MOTDEPASSE)) {
+            return $this->respond($donnees);
+        } else {
+            return $this->failNotFound('Client non trouvé ou mot de passe incorrect.');
+        }
+        // mdp est le mot de passe en clair, pas hashé, récup depuis le login form de l'app
+        // le mdp renvoyé par la bdd est hashé par contre, donc inexploitable dans android
+    }
+
     public function ReserverTraversee($noTraversee)
     {
         $session = session();
@@ -109,9 +134,6 @@ class Client extends BaseController
 
     public function ConfirmerReservation($noTraversee) {
         $session = session();
-
-        // pdf generation avec dompdf
-        require '../vendor/autoload.php';
 
         $modTraversee = new ModeleTraversee();
         $data['nomLiaisonSelected'] = $modTraversee->where('traversee.notraversee', $noTraversee)->GetLiaisonFromTraversee();
@@ -213,30 +235,6 @@ class Client extends BaseController
         }
 
 
-        // génération pdf
-        try {
-            $pdfFactureOptions = new Options();
-            $pdfFactureOptions->set('defaultFont', 'Nunito');
-
-            $pdfFacture = new Dompdf($pdfFactureOptions);
-
-            $pdfFacture->setPaper('A4', 'portrait');
-            $pdfFacture->loadHtml('hello world');
-
-            $pdfFacture->render();
-
-            $output = $pdfFacture->output();
-            //$pdfFacture->stream(facture.pdf);
-
-            // à compléter !!!!!!
-
-            $data['pdfFactureReservation'] = $pdfFacture;
-
-        } catch(Exception $e) {
-            $data['erreur'] = "Un problème est survenu lors de la génération du PDF. Veuillez réessayer.";
-        }
-
-
         if($this->request->getPost('moyenPaiement') == 'ESPECES') {
             $data['TitreDeLaPage'] = "Atlantik - Confirmation de réservation"; 
             $data['infoPaiement'] = "Vous avez choisi de régler en espèces. Merci de vous présenter à l'accueil pour finaliser votre réservation.";
@@ -328,6 +326,55 @@ class Client extends BaseController
         return view('Templates/Header', $data)
         . view('Client/vue_afficher_commandes', $data)
         . view('Templates/Footer');
+    }
+
+    public function AfficherFacture($noReservation) {
+        // pdf generation avec dompdf
+        require '../vendor/autoload.php';
+
+        // redirection vers une page non affichée à l'écran permettant uniquement d'envoyer le pdf tout en exécutant complètement la confirmation de réservation
+
+        try {
+            $pdfFactureOptions = new Options();
+            $pdfFactureOptions->set('defaultFont', 'Nunito');
+        
+            $pdfFacture = new Dompdf($pdfFactureOptions);
+            $pdfFacture->setPaper('A4', 'portrait');
+
+            $fontDirectory = '/assets/fonts';
+            $pdfFactureOptions->setChroot($fontDirectory);
+
+            $dompdf->getFontMetrics()->registerFont([
+                'family' => 'Lexend',
+                'style' => 'normal',
+                'weight' => 'normal',
+            ], $fontDirectory.'/Lexend-VariableFont_wght.ttf');
+
+            $contenuFacture = 
+            '
+            <style>
+                @font-face {
+                    font-family: "Lexend";
+                    font-style: normal;
+                    font-weight: normal;
+                }
+            </style>
+
+            <div class="text-center">
+                <h1 style="font-family: Lexend;">Facture Atlantik</h1>
+            </div>
+            ';
+
+            $pdfFacture->loadHtml($contenuFacture);
+        
+            $pdfFacture->render();
+        
+            $output = $pdfFacture->output();
+            $pdfFacture->stream('facture.pdf');
+            
+        } catch(Exception $e) {
+            $data['erreur'] = "Un problème est survenu lors de la génération du PDF. Veuillez réessayer.";
+        }
     }
 
 }

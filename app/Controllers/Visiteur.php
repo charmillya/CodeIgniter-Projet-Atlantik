@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Controllers;
+use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
 use App\Models\ModeleClient;
 use App\Models\ModeleLiaison;
 use App\Models\ModelePeriode;
 use App\Models\ModeleCategorie;
+use App\Models\ModeleReservation;
 use App\Models\ModeleSecteur;
 use App\Models\ModeleTraversee;
 
@@ -12,6 +15,8 @@ helper(['assets']); // donne accès aux fonctions du helper 'asset'
 
 class Visiteur extends BaseController
 {
+    use ResponseTrait;
+
     // php 8.2.12
     public function Accueil()
     {

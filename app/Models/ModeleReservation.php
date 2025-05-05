@@ -24,4 +24,16 @@ class ModeleReservation extends Model
         ->paginate(5);
     }
 
+    public function GetAllCommandesClient($noClient) {
+        return $this->join('traversee', 'reservation.NOTRAVERSEE = traversee.NOTRAVERSEE',  'inner')
+        ->join('liaison', 'traversee.NOLIAISON = liaison.NOLIAISON',  'inner')
+        ->join('port as portdepart', 'portdepart.NOPORT = liaison.NOPORT_DEPART',  'inner')
+        ->join('port as portarrivee', 'portarrivee.NOPORT = liaison.NOPORT_ARRIVEE',  'inner')
+        ->where('reservation.noclient', $noClient)
+        ->orderBy('reservation.DATEHEURE, reservation.NORESERVATION', 'DESC')
+        ->select('reservation.NORESERVATION as NORESERVATION, DATE(reservation.DATEHEURE) as DATERESERVATION, portdepart.nom as PORTDEPART, portarrivee.nom as PORTARRIVEE, DATE(traversee.DATEHEUREDEPART) as DATETRAVERSEE, reservation.MONTANTTOTAL as TOTAL, reservation.PAYE as PAYE')
+        ->get()
+        ->getResult();
+    }
+    
 } // Fin Classe

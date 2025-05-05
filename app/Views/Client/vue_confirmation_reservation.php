@@ -15,10 +15,7 @@
                 if(isset($infoPaiement)) {
                     echo '<h6><i>'.$infoPaiement.'</i></h6>';
                 }
-                if(isset($pdfFactureReservation)) {
-                    echo '<h6><a href="">Télécharger la facture</a></h6>';
-                    // A COMPLETER (href) !!!
-                }
+                echo '<h6><a href="confirmer/facture/'.$noReservationSelected.'">Télécharger la facture</a></h6>';
                 ?>
         </div>
         <br><br>
